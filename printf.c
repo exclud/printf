@@ -3,52 +3,65 @@
 #include "main.h"
 
 /**
- * _printf - prints output according to a format.
- * @format: character string
+ * _printf - produces output according to a format
+ * @format: character string containing zero or more directives
  *
- * Return: number of characters printed
+ * Return: the number of characters printed (excluding the null byte used
+ * to end output to strings), or -1 if an error occurs.
  */
 int _printf(const char *format, ...)
 {
-    va_list args;
-    int count = 0;
+	int count = 0;
+	va_list args;
 
-    va_start(args, format);
+	if (format == NULL)
+		return (-1);
 
-    while (*format != '\0')
-    {
-        if (*format == '%')
-        {
-            format++;
-            switch (*format)
-            {
-                case 'c':
-                    count += putchar(va_arg(args, int));
-                    break;
-                case 's':
-                    count += printf("%s", va_arg(args, char *));
-                    break;
-                case '%':
-                    count += putchar('%');
-                    break;
-                default:
-                    putchar('%');
-                    putchar(*format);
-                    count += 2;
-                    break;
-            }
-        }
-        else
-        {
-            count += putchar(*format);
-        }
-        format++;
-    }
+	va_start(args, format);
 
-    va_end(args);
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
+			if (*format == 'd' || *format == 'i')
+			{
+				int num = va_arg(args, int);
+				count += _putchar(num / 10 + '0');
+				count += _putchar(num % 10 + '0');
+			}
+			else if (*format == 'c')
+			{
+				count += _putchar(va_arg(args, int));
+			}
+			else if (*format == 's')
+			{
+				char *str = va_arg(args, char *);
+				if (str == NULL)
+					str = "(null)";
+				while (*str)
+				{
+					count += _putchar(*str);
+					str++;
+				}
+			}
+			else if (*format == '%')
+			{
+				count += _putchar('%');
+			}
+		}
+		else
+		{
+			count += _putchar(*format);
+		}
+		format++;
+	}
 
-    return (count);
+	va_end(args);
+
+	return (count);
 }
+
 
 /**
  * _printstr - Prints a string to stdout
