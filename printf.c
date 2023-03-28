@@ -34,7 +34,7 @@ int _printf(const char *format, ...)
 					str = va_arg(args, char *);
 					if (str == NULL)
 						str = "(null)";
-					count += _printstr(str);
+				count += _printstr(str);
 					break;
 
 			case 'd':
@@ -45,6 +45,9 @@ int _printf(const char *format, ...)
 				count += puts(str);
 				free(str);
 				break;
+            case 'b':
+                count += print_binary(va_arg(args, unsigned int));
+                break;
 
 			case '%':
 				count += _putchar('%');
@@ -157,4 +160,20 @@ int _print_integer(int n)
 	return (length);
 }
 
+/**
+ * print_binary - prints a binary number
+ * @n: the number to print
+ * Return: the number of digits printed
+ */
+int print_binary(unsigned int n)
+{
+        int count = 0;
+
+        if (n > 1)
+                count += print_binary(n >> 1);
+
+        count += _putchar((n & 1) + '0');
+
+        return (count);
+}
 
