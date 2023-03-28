@@ -1,16 +1,11 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stdarg.h>
-#include <unistd.h>
-
-/*putchar function prototype*/
-int _putchar(char c);
-/* function prototype*/
+#include <stdarg.h> /* for va_list */
+#include <stdlib.h> /* for NULL */
 
 int _printf(const char *format, ...);
-int _printstr(char *str);
-
+int _putchar(char c);
 
 #endif /* MAIN_H */
 
