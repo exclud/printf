@@ -31,12 +31,16 @@ int _printf(const char *format, ...)
 				break;
 
 			case 's':
-				str = va_arg(args, char *);
-				count += puts(str);
-				break;
+					str = va_arg(args, char *);
+					if (str == NULL)
+						str = "(null)";
+					count += _printstr(str);
+					break;
 
 			case 'd':
 			case 'i':
+                 count += _print_integer(va_arg(args, int));
+					break;
 				str = itoa(va_arg(args, int));
 				count += puts(str);
 				free(str);
@@ -124,3 +128,31 @@ char *itoa(int n)
 	return (str);
 }
 
+/**
+ * _print_integer - print an integer
+ * @n: integer to print
+ * Return: number of characters printed
+ */
+int _print_integer(int n)
+{
+	int div = 1, length = 0;
+
+	if (n < 0)
+	{
+		length += _putchar('-');
+		n *= -1;
+	}
+
+	while (n / div >= 10)
+	{
+		div *= 10;
+	}
+
+	while (div != 0)
+	{
+		length += _putchar((n / div) % 10 + '0');
+		div /= 10;
+	}
+
+	return (length);
+}

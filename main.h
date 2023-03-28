@@ -11,7 +11,7 @@ int _putchar(char c);
 int _printf(const char *format, ...);
 int _printstr(char *str);
 char *itoa(int n);
-
+int _print_integer(int n);
 
 #endif /* MAIN_H */
 
