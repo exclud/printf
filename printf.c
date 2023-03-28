@@ -1,53 +1,68 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include "main.h"
 
 /**
- * _printf - prints output according to a format.
- * @format: character string
+ * _printf - Prints output according to a format.
+ * @format: A character string that specifies the output format.
  *
- * Return: number of characters printed
+ * Return: The number of characters printed (excluding the null byte used to
+ *         end output to strings).
  */
 int _printf(const char *format, ...)
 {
-va_list args;
-int count = 0;
+	va_list args;
+	int count = 0;
+	char *str;
 
-va_start(args, format);
+	va_start(args, format);
 
-while (*format != '\0')
-{
-if (*format == '%')
-{
-format++;
-switch (*format)
-{
-case 'c':
-count += putchar(va_arg(args, int));
-break;
-case 's':
-count += printf("%s", va_arg(args, char *));
-break;
-case '%':
-count += putchar('%');
-break;
-default:
-putchar('%');
-putchar(*format);
-count += 2;
-break;
-}
-}
-else
-{
-count += putchar(*format);
-}
-format++;
-}
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
 
-va_end(args);
+			switch (*format)
+			{
+			case 'c':
+				count += _putchar(va_arg(args, int));
+				break;
 
-return (count);
+			case 's':
+				str = va_arg(args, char *);
+				count += puts(str);
+				break;
+
+			case 'd':
+			case 'i':
+				str = itoa(va_arg(args, int));
+				count += puts(str);
+				free(str);
+				break;
+
+			case '%':
+				count += _putchar('%');
+				break;
+
+			default:
+				count += _putchar('%');
+				count += _putchar(*format);
+				break;
+			}
+		}
+		else
+		{
+			count += _putchar(*format);
+		}
+
+		format++;
+	}
+
+	va_end(args);
+
+	return (count);
 }
 
 /**
@@ -73,4 +88,39 @@ putchar(str[i]);
         return (i);
 }
 
+/**
+ * itoa - Converts an integer to a string.
+ * @n: The integer to convert.
+ *
+ * Return: A pointer to the resulting string.
+ */
+char *itoa(int n)
+{
+	int len = 0, tmp = n;
+	char *str;
+
+	if (n == 0)
+		return ("0");
+
+	while (tmp)
+	{
+		tmp /= 10;
+		len++;
+	}
+
+	str = malloc(len + 1);
+
+	if (!str)
+		return (NULL);
+
+	str[len--] = '\0';
+
+	while (n)
+	{
+		str[len--] = (n % 10) + '0';
+		n /= 10;
+	}
+
+	return (str);
+}
 
