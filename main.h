@@ -4,8 +4,9 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+/*putchar function prototype*/
 int _putchar(char c);
-/* Other function prototypes go here */
+/* function prototype*/
 
 int _printf(const char *format, ...);
 int _printstr(char *str);
